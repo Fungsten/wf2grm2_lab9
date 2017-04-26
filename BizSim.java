@@ -25,7 +25,7 @@ public class BizSim {
 	protected PriorityVector<Customer> customerQueue;
 
 	/* series of service points where customers queue and are served */
-	protected Vector<QueueVector<Customer>> servicePoints;
+	protected Vector<QueueVector<Customer>> lines;
 
 	/* current time step in the simulation */
 	protected int time;
@@ -49,11 +49,11 @@ public class BizSim {
 	 * @latestArrival latest timeStep that a Customer may appear in the simulation
 	 * @seed used to seed a Random() so that simulation is repeatable.
 	 */
-	public BizSim(int numCustomers, int numServicePoints, int lastestArrival, long seed, int type) {
+	public BizSim(int numCustomers, int numServicePoints, int latestArrival, long seed, int type) {
 		this.customerQueue = generateCustomerSequence(numCustomers, latestArrival, seed);
-		this.servicePoints = new Vector<QueueVector<Customer>>();
+		this.lines = new Vector<QueueVector<Customer>>();
 		for (int i = 0; i < numServicePoints; ++i){
-			this.servicePoints.add(new QueueVector<Customer>());
+			this.lines.add(new QueueVector<Customer>());
 		}
 		this.time = 0;
 		this.seed = seed;
@@ -77,11 +77,12 @@ public class BizSim {
 		PriorityVector<Customer> queue = new PriorityVector<Customer>();
 		for (int i = 0; i < numCustomers; ++i){
 			int diceRoll = rand.nextInt();
+			Customer x;
 			if (diceRoll % 10 == 0){
 				// One in ten customers is a terrible person
-				Customer x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, true);
+				x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, true);
 			} else {
-				Customer x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, false);
+				x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, false);
 			}
 			queue.add(x);
 		}
@@ -94,7 +95,27 @@ public class BizSim {
 	 * @post the simulation has advanced @timeSteps time steps
 	 * @return true if the simulation is over, false otherwise
 	 */
-	public boolean step(int timeSteps);
+	public boolean step(int timeSteps){
+		// regardless of type, first check if lines have customers with completed service
+		++this.time;
+		for (int i = 0; i < lines.size(); ++i){
+			if (lines.elementAt(i).get().serviceTime == 0){
+				// if a customer's service is completed, remove that customer from the queue
+				lines.elementAt(i).remove();
+			}
+		}
+		//if supermarket
+		if (this.type == 1){
+
+		//else bank
+		} else {
+			if (this.time == customerQueue.getFirst().getArrival()){
+				lines
+			}
+			}
+
+		}
+	}
 
 	/**
 	 * Checks if all customers have been satisfied
@@ -105,12 +126,9 @@ public class BizSim {
 			return false;
 		}
 		// else everyone has arrived, check if they're gone
-		for (int i = 0; i < servicePoints.size(); ++i){
-			// Looking at checkout lines
-			for (int j = 0; j < servicePoints.elementAt(i).size(); ++j){
-				if (!j.servicePoints.elementAt(i).isEmpty()){
-					return false;
-				}
+		for (int i = 0; i < this.lines.size(); ++i){
+			if (!this.lines.elementAt(i).isEmpty()){
+				return false;
 			}
 		}
 		return true;
@@ -120,17 +138,16 @@ public class BizSim {
 	 * @return a string representation of the simulation
 	 */
 	public String toString() {
-		// TODO: modify if needed.
 		String str = "Time: " + time + "\n";
 		str = str + "Event Queue: ";
-		if (eventQueue != null) {
-			str = str + eventQueue.toString();
+		if (this.customerQueue != null) {
+			str = str + this.customerQueue.toString();
 		}
 		str = str + "\n";
 
-		if (servicePoints != null)  {
-			for (Queue<Customer> sp : servicePoints) {
-				str = str + "Service Point: " + sp.toString() + "\n";
+		if (this.lines != null)  {
+			for (QueueVector<Customer> l : lines) {
+				str = str + "Lines: " + l.toString() + "\n";
 			}
 		}
 
