@@ -21,10 +21,11 @@ public class Customer implements Comparable<Customer> {
 
 	public Customer(int arrivalTime, int serviceTime, int name, boolean val) {
 		this.arrivalTime = arrivalTime;
-		this.problemCustomer = val;
 		this.name = nameList(name);
 		if (this.name.equals("Brady")){
 			this.problemCustomer = true;
+		} else {
+			this.problemCustomer = val;
 		}
 		if (this.problemCustomer == true){
 			this.serviceTime = serviceTime * 5;
@@ -59,18 +60,24 @@ public class Customer implements Comparable<Customer> {
 	}
 
 	public String toString() {
-		String info = "Customer " + this.name + "'s arrival time: " + this.arrivalTime + "\n"
-			+ this.name + "'s service time: " + this.serviceTime;
+		String time;
+			if (this.arrivalTime % 60 < 10){
+				time = (int)Math.floor(this.arrivalTime / 60) +":0" + (this.arrivalTime % 60);
+			} else {
+				time = (int)Math.floor(this.arrivalTime / 60) +":" + (this.arrivalTime % 60);
+			}
+
+		String info = "Customer " + this.name + "'s arrival time: " + time + ".\n"
+			+ this.name + "'s service time: " + this.serviceTime + " minutes.";
 		if (getProblem() == true){
-			info = info + "\nBe warned, this is a known problem customer.";
+			info = info + "\n" + this.name + " says: \"I am a self-entitled brat and want free things!\""
+				+ "\nBe warned, this is a known problem customer.";
 		}
+		info = info + "\n";
 		return info;
 	}
 
 	public boolean getProblem(){
-		if (this.problemCustomer == true){
-			System.out.println("Customer " + this.name + " says: I am a self-entitled brat and want free things!");
-		}
 		return this.problemCustomer;
 	}
 
@@ -98,6 +105,7 @@ public class Customer implements Comparable<Customer> {
 		names.add("_____"); //i = 13
 		names.remove("_____"); //jk
 		names.add("Xion");  //i = 13
+		//yes, I just spent time and memory on a joke very few people get and even less people find funny
 
 		//NaBrO4 is here
 		names.add("Grace"); //i = 14
