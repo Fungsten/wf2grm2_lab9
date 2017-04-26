@@ -33,7 +33,6 @@ public class Customer implements Comparable<Customer> {
 		}
 		this.atTeller = false; // switched if first in queue
 
-
 	}
 
 	public int getArrival(){
@@ -70,10 +69,15 @@ public class Customer implements Comparable<Customer> {
 
 	public boolean getProblem(){
 		if (this.problemCustomer == true){
-			System.out.println("Customer " + this.name + " says: I am a self-entitled brat and want you to give me free things!");
+			System.out.println("Customer " + this.name + " says: I am a self-entitled brat and want free things!");
 		}
 		return this.problemCustomer;
 	}
+
+	//Vector<String> names = new Vector<String>("Xemnas", "Xigbar", "Xaldin",
+	//"Vexen", "Lexaeus", "Zexion", "Saix", "Axel", "Demyx", "Luxord", "Marluxia",
+	//"Larxene", "Roxas", "Xion", "Grace", "Will", "Alison", "Alexia", "Cielo", "Cecilia",
+	//"Brady");
 
 	public String nameList(int i){
 		Vector<String> names = new Vector<String>();
