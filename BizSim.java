@@ -69,7 +69,8 @@ public class BizSim {
 		Random rand = new Random(seed);
 		PriorityVector<Customer> queue = new PriorityVector<Customer>();
 		for (int i = 0; i < numCustomers; ++i){
-			if (rand%10 == 0){
+			int diceRoll = rand.nextInt();
+			if (diceRoll % 10 == 0){
 				// One in ten customers is a terrible person
 				Customer x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, true);
 			} else {

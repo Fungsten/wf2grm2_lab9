@@ -21,15 +21,18 @@ public class Customer implements Comparable<Customer> {
 	 protected String name;
 	 protected boolean problemCustomer;
 
-	public Customer(int arrivalTime, int serviceTime, String name, boolean val) {
+	public Customer(int arrivalTime, int serviceTime, int name, boolean val) {
 		this.arrivalTime = arrivalTime;
 		this.problemCustomer = val;
+		this.name = nameList(name);
+		if (this.name.equals("Brady")){
+			this.problemCustomer = true;
+		}
 		if (this.problemCustomer == true){
 			this.serviceTime = serviceTime * 5;
 		} else {
 			this.serviceTime = serviceTime;
 		}
-		this.name = name;
 
 	}
 
@@ -53,8 +56,8 @@ public class Customer implements Comparable<Customer> {
 	}
 
 	public String toString() {
-		String info = "Customer " + this.name + "'s arrival: " + this.arrivalTime + "\n"
-			+ "Customer " + this.name + "'s service time required: " + this.serviceTime;
+		String info = "Customer " + this.name + "'s arrival time: " + this.arrivalTime + "\n"
+			+ this.name + "'s service time: " + this.serviceTime;
 		if (getProblem() == true){
 			info = info + "\nBe warned, this is a known problem customer.";
 		}
@@ -63,10 +66,41 @@ public class Customer implements Comparable<Customer> {
 
 	public boolean getProblem(){
 		if (this.problemCustomer == true){
-			System.out.println("Customer " + this.name + " says: I am a self-entitled brat \nand want you to give me free things!");
+			System.out.println("Customer " + this.name + " says: I am a self-entitled brat and want you to give me free things!");
 		}
 		return this.problemCustomer;
 	}
 
+	public String nameList(int i){
+		Vector<String> names = new Vector<String>();
+		//Organization XIII goes to the bank
+		names.add("Xemnas"); //i = 0
+		names.add("Xigbar"); //i = 1
+		names.add("Xaldin"); //i = 2
+		names.add("Vexen"); //i = 3
+		names.add("Lexaeus"); //i = 4
+		names.add("Zexion"); //i = 5
+		names.add("Saix"); //i = 6
+		names.add("Axel"); //i = 7
+		names.add("Demyx"); //i = 8
+		names.add("Luxord"); //i = 9
+		names.add("Marluxia"); //i = 10
+		names.add("Larxene"); //i = 11
+		names.add("Roxas"); //i = 12
+		names.add("_____"); //i = 13
+		names.remove("_____"); //jk
+		names.add("Xion");  //i = 13
+
+		//NaBrO4 is here
+		names.add("Grace"); //i = 14
+		names.add("Will");  //i = 15
+		names.add("Alison"); //i = 16
+		names.add("Alexia"); //i = 17
+		names.add("Cielo"); //i = 18
+		names.add("Cecilia"); //i = 19
+		names.add("Brady"); //i = 20
+
+		return names.elementAt(i);
+	}
 
 }
