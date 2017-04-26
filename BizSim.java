@@ -25,13 +25,16 @@ public class BizSim {
 	protected PriorityVector<Customer> customerQueue;
 
 	/* series of service points where customers queue and are served */
-	protected Vector<Queue<Customer>> servicePoints;
+	protected Vector<QueueVector<Customer>> servicePoints;
 
 	/* current time step in the simulation */
 	protected int time;
 
 	/* seed for Random() so that simulation is repeatable */
 	protected long seed;
+
+	// If type = 1, market; if type = 2, bank
+	protected int type;
 
 	/* Used to bound the range of service times that Customers require in minutes*/
 	static final int MIN_SERVICE_TIME = 1;
@@ -46,21 +49,25 @@ public class BizSim {
 	 * @latestArrival latest timeStep that a Customer may appear in the simulation
 	 * @seed used to seed a Random() so that simulation is repeatable.
 	 */
-	public BizSim(int numCustomers, int numServicePoints, int lastestArrival, long seed) {
+	public BizSim(int numCustomers, int numServicePoints, int lastestArrival, long seed, int type) {
 		this.customerQueue = generateCustomerSequence(numCustomers, latestArrival, seed);
+		this.servicePoints = new Vector<QueueVector<Customer>>();
+		for (int i = 0; i < numServicePoints; ++i){
+			this.servicePoints.add(new QueueVector<Customer>());
+		}
 		this.time = 0;
 		this.seed = seed;
-		}
+		this.type = type;
 	}
 
 	/**
 	 * Generates a sequence of Customer objects, stored in a PriorityQueue.
 	 * Customer priority is determined by arrival time
 	 * @arg numCustomers number of customers to simulate
-	 * @arg maxEventStart maximum timeStep that a customer arrives
+	 * @arg latestArrival maximum timeStep that a customer arrives
 	 *      in @eventQueue
 	 * @arg seed use Random(seed) to make customer sequence repeatable
-	 * @return A PriorityQueue that represents Customer arrivals,
+	 * @return A PriorityVector that represents Customer arrivals,
 	 *         ordered by Customer arrival time
 	 */
 	public static PriorityVector<Customer> generateCustomerSequence(int numCustomers,
@@ -87,15 +94,27 @@ public class BizSim {
 	 * @post the simulation has advanced @timeSteps time steps
 	 * @return true if the simulation is over, false otherwise
 	 */
-	abstract public boolean step(int timeSteps);
+	public boolean step(int timeSteps);
 
 	/**
-	 * Advances 1 time step through the simulation.
-	 *
-	 * @post the simulation has advanced 1 time step
-	 * @return true if the simulation is over, false otherwise
+	 * Checks if all customers have been satisfied
 	 */
-	abstract public boolean step();
+	public boolean check(){
+		// if there are still customers to arrive
+		if (!customerQueue.isEmpty()){
+			return false;
+		}
+		// else everyone has arrived, check if they're gone
+		for (int i = 0; i < servicePoints.size(); ++i){
+			// Looking at checkout lines
+			for (int j = 0; j < servicePoints.elementAt(i).size(); ++j){
+				if (!j.servicePoints.elementAt(i).isEmpty()){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 	/**
 	 * @return a string representation of the simulation
