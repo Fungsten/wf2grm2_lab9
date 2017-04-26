@@ -16,6 +16,7 @@ public class Customer implements Comparable<Customer> {
 	 protected int arrivalTime;
 	 protected int serviceTime;
 	 protected String name;
+	 protected boolean atTeller;
 	 protected boolean problemCustomer;
 
 	public Customer(int arrivalTime, int serviceTime, String name, boolean val) {
@@ -27,6 +28,7 @@ public class Customer implements Comparable<Customer> {
 			this.serviceTime = serviceTime;
 		}
 		this.name = name;
+		this.atTeller = false; // switched if first in queue
 
 	}
 
