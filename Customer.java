@@ -63,7 +63,7 @@ public class Customer implements Comparable<Customer> {
 
 	public boolean getProblem(){
 		if (this.problemCustomer == true){
-			System.out.println("Customer " + this.name + " says: I am a self-entitled brat and want you to give me free things!");
+			System.out.println("Customer " + this.name + " says: I am a self-entitled brat \nand want you to give me free things!");
 		}
 		return this.problemCustomer;
 	}
