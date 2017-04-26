@@ -31,6 +31,7 @@ public class Main{
     //Customer a = new Customer(1, 10, 1, false);
     //Customer b = new Customer(2, 10, 2, true);
 
+    /*
     Random seeds = new Random();
     int seed = seeds.nextInt();
     Random rand = new Random(seed);
@@ -41,6 +42,7 @@ public class Main{
     }
     //System.out.println(a.compareTo(b));
     //System.out.println(b.toString());
+    */
 
   }
 

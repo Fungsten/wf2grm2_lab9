@@ -24,7 +24,8 @@ public class BizSim {
 	/* sequence of customers, prioritized by randomly-generated event time */
 	protected PriorityVector<Customer> customerQueue;
 
-	/* series of service points where customers queue and are served */
+	/* series of service points where customers queue and are served
+	 	 customers wait in the last index of lines */
 	protected Vector<QueueVector<Customer>> lines;
 
 	/* current time step in the simulation */
@@ -96,29 +97,13 @@ public class BizSim {
 	 * @return true if the simulation is over, false otherwise
 	 */
 	public boolean step(int timeSteps){
-<<<<<<< HEAD
-		// regardless of type, first check if lines have customers with completed service
-		++this.time;
-		for (int i = 0; i < lines.size(); ++i){
-			if (lines.elementAt(i).get().serviceTime == 0){
-				// if a customer's service is completed, remove that customer from the queue
-				lines.elementAt(i).remove();
-			}
+		int countdown = timeSteps;
+		while (countdown >= 0){
+			step();
+			--countdown;
 		}
-		//if supermarket
-		if (this.type == 1){
-
-		//else bank
-		} else {
-			if (this.time == customerQueue.getFirst().getArrival()){
-				lines
-			}
-			}
-
-		}
+		return step();
 	}
-=======
-
 
 	/**
 	 * Advances 1 time step through the simulation.
@@ -126,26 +111,70 @@ public class BizSim {
 	 * @post the simulation has advanced 1 time step
 	 * @return true if the simulation is over, false otherwise
 	 */
-	abstract public boolean step(){
-		/*
-		pseudo code time
-		time adds one to itself
-		every customer at a teller has his/her service time subtracted by one
-			if service time reaches zero, next customer goes to teller
-		if all queues are empty, return true
-		*/
-		this.time++;
-		if ()
-	}
+	public boolean step(){
+		// increment time
+		++this.time;
 
->>>>>>> 17f9c939324236d0f0ac85ab770582ad7f30f6ab
+		// regardless of type, first check if lines have customers with completed service
+		// if a customer's service is completed, remove that customer from the queue
+		for (int a = 0; a < lines.size(); ++a){
+			if (this.lines.elementAt(a).get().serviceTime == 0){
+				this.lines.elementAt(a).remove();
+			}
+		}
+
+		// make sure all customers who are first in line (i.e., being served) are marked as such
+		for (int b = 0; b < this.lines.size() - 2; ++b){
+			this.lines.elementAt(b).get().atTeller = true;
+		}
+
+		//if supermarket
+		if (this.type == 1){
+			// if a customer arrives, add them to the shortest queue; if tied, go to the lower index
+			if (this.time == this.customerQueue.getFirst().getArrival()){
+				int smallest = this.customerQueue.size(); // a large number
+				for (int i = 0; i < this.lines.size() - 2; ++i){
+					if (this.lines.elementAt(i).size() < smallest){
+						smallest = i;
+					}
+				}
+				this.lines.elementAt(smallest).add(this.customerQueue.remove());
+			}
+
+			// decrease service time required for all customers being served
+			for (int j = 0; j < this.lines.size() - 2; ++j){
+				this.lines.elementAt(j).get().servedTime();
+			}
+			return check();
+
+		//else bank
+		} else {
+			// The bank has its own queue for customers waiting to for a teller; this is the last element in this.lines
+			// if a customer arrives, add them to the customer queue
+			if (this.time == this.customerQueue.getFirst().getArrival()){
+				this.lines.elementAt(this.lines.size() - 1).add(this.customerQueue.remove());
+			}
+			// check if a bank teller is free and there are customers, customers go to first free teller
+			for (int u = 0; u < this.lines.size() - 2; ++u){
+				if (this.lines.elementAt(u).size() == 0 && this.lines.elementAt(this.lines.size() - 1).size() != 0){
+					this.lines.elementAt(u).add(this.lines.elementAt(this.lines.size() - 1).remove());
+				}
+			}
+
+			// decrease service time required for all customers being served
+			for (int v = 0; v < this.lines.size() - 2; ++v){
+				this.lines.elementAt(v).get().servedTime();
+			}
+			return check();
+		}
+	}
 
 	/**
 	 * Checks if all customers have been satisfied
 	 */
 	public boolean check(){
 		// if there are still customers to arrive
-		if (!customerQueue.isEmpty()){
+		if (!this.customerQueue.isEmpty()){
 			return false;
 		}
 		// else everyone has arrived, check if they're gone
