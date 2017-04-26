@@ -31,7 +31,10 @@ public class Main{
     Customer a = new Customer(1, 10, 1, false);
     Customer b = new Customer(2, 10, 2, true);
 
-    System.out.println(generateCustomerSequence(21, 400, 9).toString());
+    PriorityVector<Customer> queue = generateCustomerSequence(21, 400, 9);
+    for (int j = 0; j < 21; ++j){
+      System.out.println(queue.remove().toString());
+    }
     //System.out.println(a.compareTo(b));
     //System.out.println(b.toString());
     Random seeds = new Random();
