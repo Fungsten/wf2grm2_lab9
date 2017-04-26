@@ -21,14 +21,14 @@ public class Customer implements Comparable<Customer> {
 
 	public Customer(int arrivalTime, int serviceTime, int name, boolean val) {
 		this.arrivalTime = arrivalTime;
-		this.name = nameList(name);
-		if (this.name.equals("Brady")){
-			this.problemCustomer = true;
+		this.name = nameList(name); //Customers are people, too
+		if (this.name.equals("Brady") || this.name.equals("Brent")){
+			this.problemCustomer = true; //Disclaimer: we think Brent is great. Brady's still a mischievous being.
 		} else {
-			this.problemCustomer = val;
+			this.problemCustomer = val; //true for problem customers, false for regular boring ones
 		}
 		if (this.problemCustomer == true){
-			this.serviceTime = serviceTime * 5;
+			this.serviceTime = serviceTime * 5; //to simulate real life and notalwaysright.com
 		} else {
 			this.serviceTime = serviceTime;
 		}
@@ -60,23 +60,30 @@ public class Customer implements Comparable<Customer> {
 	}
 
 	public String toString() {
+		//clean presentation of some relevant information and some not-so-relevant-but-just-as-important information
+
+		//rather than somewhat meaningless integers, we now have a clock
+		//everything apparently starts at noon
 		String time;
 			if (this.arrivalTime % 60 < 10){
 				time = (int)Math.floor(this.arrivalTime / 60) +":0" + (this.arrivalTime % 60);
 			} else {
 				time = (int)Math.floor(this.arrivalTime / 60) +":" + (this.arrivalTime % 60);
 			}
-
 		String info = "Customer " + this.name + "'s arrival time: " + time + ".\n"
 			+ this.name + "'s service time: " + this.serviceTime + " minutes.";
+
+		//purely for fun
 		if (getProblem() == true){
 			info = info + "\n" + this.name + " says: \"I am a self-entitled brat and want free things!\""
 				+ "\nBe warned, this is a known problem customer.";
 		}
+
 		info = info + "\n";
 		return info;
 	}
 
+	//may be extraneous but we can't be too careful
 	public boolean getProblem(){
 		return this.problemCustomer;
 	}
@@ -88,7 +95,7 @@ public class Customer implements Comparable<Customer> {
 
 	public String nameList(int i){
 		Vector<String> names = new Vector<String>();
-		//Organization XIII goes to the bank
+		//Organization XIII goes to the bank or supermarket
 		names.add("Xemnas"); //i = 0
 		names.add("Xigbar"); //i = 1
 		names.add("Xaldin"); //i = 2
@@ -115,6 +122,12 @@ public class Customer implements Comparable<Customer> {
 		names.add("Cielo"); //i = 18
 		names.add("Cecilia"); //i = 19
 		names.add("Brady"); //i = 20
+
+		//cameo by the CS department chair
+		names.add("Chair"); //i = 21
+
+		//cameo by the the person who sits in the CS department chair
+		names.add("Brent"); //i = 22
 
 		return names.elementAt(i);
 	}

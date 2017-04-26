@@ -61,3 +61,19 @@ Create a lab directory in the usual way that includes the following:
 2. Your answers to thought questions 1-4 as comments at the of your BusinessSimulation.java file.
 
 As in all labs, you will be graded on design, documentation, style, and correctness. Be sure to document your program with appropriate comments, including a general description at the top of the file, a description of each method with pre- and post-conditions where appropriate. Also use comments and descriptive variable names to clarify sections of the code which may not be clear to someone trying to understand it.
+
+
+
+
+
+
+
+
+Thought Questions:
+1. Run several simulations of both types of queues. Which queue strategy seems to process all the customers fastest?
+
+2. Is their a difference between the average wait time for customers between the two techniques?
+
+3. Suppose you simulated the ability to jump between lines in a multiple line simulation. When a line has two or more customers than another line, customers move from the end one line to another until the lines are fairly even. You see this behavior frequently at grocery stores. Does this change the type of underlying structure you use to keep customers in line?
+
+4. Suppose lines were dedicated to serving customers of varying lengths of service times. Would this improve the average wait time for a customer?

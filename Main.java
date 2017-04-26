@@ -35,7 +35,7 @@ public class Main{
     int seed = seeds.nextInt();
     Random rand = new Random(seed);
 
-    PriorityVector<Customer> queue = generateCustomerSequence(21, 400, rand.nextInt());
+    PriorityVector<Customer> queue = generateCustomerSequence(23, 400, rand.nextInt());
     for (int j = 0; j < 21; ++j){
       System.out.println(queue.remove().toString());
     }
