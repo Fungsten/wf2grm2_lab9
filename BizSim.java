@@ -1,3 +1,20 @@
+/*
+Will Fung and Grace Mazzarella
+
+Thought Questions:
+1.
+[]
+
+2.
+[]
+
+3.
+[]
+
+4.
+[]
+*/
+
 import java.util.Vector;
 import java.util.Random;
 import structure5.*;

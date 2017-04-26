@@ -1,3 +1,8 @@
+/*
+Will Fung and Grace Mazzarella
+
+*/
+
 import structure5.*;
 
 public class Customer implements Comparable<Customer> {
@@ -10,16 +15,39 @@ public class Customer implements Comparable<Customer> {
 	 * requires @serviceTime time steps to be satisfied after
 	 * arriving at a service point.
 	 */
-	public Customer(int eventTime, int serviceTime) { }
+
+	 protected int arrivalTime;
+	 protected int serviceTime;
+	 protected String name;
+
+	public Customer(int arrivalTime, int serviceTime, String name) {
+		this.arrivalTime = arrivalTime;
+		this.serviceTime = serviceTime;
+		this.name = name;
+	}
+
+	public int getArrival(){
+		return this.arrivalTime;
+	}
+
+	public int getService(){
+		return this.serviceTime;
+	}
+
+	public String getName(){
+		return this.name;
+	}
 
 	/**
-	 * Compares Customers by arrival time
+	 * Compares Customers by arrival time: getArrival - other.getArrival
 	 */
 	public int compareTo(Customer other) {
-		return 0;
+		return getArrival() - other.getArrival();
 	}
 
 	public String toString() {
-		return "";
+		String info = "Customer " + this.name + "'s arrival: " + this.arrivalTime + "\n"
+			+ "Customer " + this.name + "'s service time required: " + this.serviceTime;
+		return info;
 	}
 }
