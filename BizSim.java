@@ -22,20 +22,20 @@ import structure5.*;
 public class BizSim {
 
 	/* sequence of customers, prioritized by randomly-generated event time */
-	PriorityQueue<Customer> eventQueue;
+	protected PriorityVector<Customer> customerQueue;
 
 	/* series of service points where customers queue and are served */
-	Vector<Queue<Customer>> servicePoints;
+	protected Vector<Queue<Customer>> servicePoints;
 
 	/* current time step in the simulation */
-	int time;
+	protected int time;
 
 	/* seed for Random() so that simulation is repeatable */
-	int seed;
+	protected long seed;
 
-	/* Used to bound the range of service times that Customers require */
-	static final int MIN_SERVICE_TIME = -1; //TODO: set appropraitely
-	static final int MAX_SERVICE_TIME = -1; //TODO: set appropriately
+	/* Used to bound the range of service times that Customers require  in minutes*/
+	static final int MIN_SERVICE_TIME = 1; //TODO: set appropraitely
+	static final int MAX_SERVICE_TIME = 30; //TODO: set appropriately
 
 	/**
 	 * Creates a BusinessSimulation.
@@ -43,11 +43,13 @@ public class BizSim {
 	 *
 	 * @numCustomers number of random customers that appear in the simulation
 	 * @numSerivicePoints number of tellers in this simulation
-	 * @maxEventStart latest timeStep that a Customer may appear in the simulation
+	 * @latestArrival latest timeStep that a Customer may appear in the simulation
 	 * @seed used to seed a Random() so that simulation is repeatable.
 	 */
-	public BizSim(int numCustomers, int numServicePoints,
-				  int maxEventStart, int seed) { }
+	public BizSim(int numCustomers, int numServicePoints, int lastestArrival, long seed) {
+		customerQueue = generateCustomerSequence(numCustomers, latestArrival, seed);
+		}
+	}
 
 	/**
 	 * Generates a sequence of Customer objects, stored in a PriorityQueue.
@@ -59,11 +61,16 @@ public class BizSim {
 	 * @return A PriorityQueue that represents Customer arrivals,
 	 *         ordered by Customer arrival time
 	 */
-	public static PriorityQueue<Customer> generateCustomerSequence(int numCustomers,
-								       int maxEventStart,
-								       int seed) {
-		//TODO: fill this in
-		return null;
+	public static PriorityVector<Customer> generateCustomerSequence(int numCustomers,
+								       int latestArrival,
+								       long seed) {
+		Random rand = new Random(seed);
+		PriorityVector<Customer> queue = new PriorityVector<Customer>();
+		for (int i = 0; i < numCustomers; ++i){
+			Customer x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, false);
+			queue.add(x);
+		}
+		return queue;
 	}
 
 	/**
