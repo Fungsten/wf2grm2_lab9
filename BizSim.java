@@ -96,6 +96,7 @@ public class BizSim {
 	 * @return true if the simulation is over, false otherwise
 	 */
 	public boolean step(int timeSteps){
+<<<<<<< HEAD
 		// regardless of type, first check if lines have customers with completed service
 		++this.time;
 		for (int i = 0; i < lines.size(); ++i){
@@ -116,6 +117,28 @@ public class BizSim {
 
 		}
 	}
+=======
+
+
+	/**
+	 * Advances 1 time step through the simulation.
+	 *
+	 * @post the simulation has advanced 1 time step
+	 * @return true if the simulation is over, false otherwise
+	 */
+	abstract public boolean step(){
+		/*
+		pseudo code time
+		time adds one to itself
+		every customer at a teller has his/her service time subtracted by one
+			if service time reaches zero, next customer goes to teller
+		if all queues are empty, return true
+		*/
+		this.time++;
+		if ()
+	}
+
+>>>>>>> 17f9c939324236d0f0ac85ab770582ad7f30f6ab
 
 	/**
 	 * Checks if all customers have been satisfied
