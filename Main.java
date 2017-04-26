@@ -5,8 +5,8 @@ import structure5.*;
 public class Main{
 
   public static void main(String args[]){
-    Customer a = new Customer(1, 10, "Grace");
-    Customer b = new Customer(2, 10, "Will");
+    Customer a = new Customer(1, 10, "Grace", false);
+    Customer b = new Customer(2, 10, "Will", true);
 
     System.out.println(a.toString());
     System.out.println(a.compareTo(b));

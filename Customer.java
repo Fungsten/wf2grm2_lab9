@@ -23,9 +23,14 @@ public class Customer implements Comparable<Customer> {
 
 	public Customer(int arrivalTime, int serviceTime, String name, boolean val) {
 		this.arrivalTime = arrivalTime;
-		this.serviceTime = serviceTime;
-		this.name = name;
 		this.problemCustomer = val;
+		if (this.problemCustomer == true){
+			this.serviceTime = serviceTime * 5;
+		} else {
+			this.serviceTime = serviceTime;
+		}
+		this.name = name;
+
 	}
 
 	public int getArrival(){
@@ -51,15 +56,14 @@ public class Customer implements Comparable<Customer> {
 		String info = "Customer " + this.name + "'s arrival: " + this.arrivalTime + "\n"
 			+ "Customer " + this.name + "'s service time required: " + this.serviceTime;
 		if (getProblem() == true){
-			info = info + "\n Be warned, this is a known problem customer."
+			info = info + "\nBe warned, this is a known problem customer.";
 		}
 		return info;
 	}
 
 	public boolean getProblem(){
 		if (this.problemCustomer == true){
-			this.serviceTime = this.serviceTime * 5;
-			System.out.println("Customer " + this.name + "says: I am a self-entitled brat and want you to give me free things!")
+			System.out.println("Customer " + this.name + " says: I am a self-entitled brat and want you to give me free things!");
 		}
 		return this.problemCustomer;
 	}
