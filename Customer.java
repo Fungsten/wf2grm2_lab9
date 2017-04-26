@@ -7,9 +7,6 @@ import structure5.*;
 
 public class Customer implements Comparable<Customer> {
 
-	// TODO: fill this class in, adding member variables and
-	// methods as needed
-
 	/**
 	 * Creates a Customer that arrives at time step @eventTime and
 	 * requires @serviceTime time steps to be satisfied after
@@ -19,6 +16,7 @@ public class Customer implements Comparable<Customer> {
 	 protected int arrivalTime;
 	 protected int serviceTime;
 	 protected String name;
+	 protected boolean atTeller;
 	 protected boolean problemCustomer;
 
 	public Customer(int arrivalTime, int serviceTime, int name, boolean val) {
@@ -33,6 +31,8 @@ public class Customer implements Comparable<Customer> {
 		} else {
 			this.serviceTime = serviceTime;
 		}
+		this.atTeller = false; // switched if first in queue
+
 
 	}
 
@@ -42,6 +42,10 @@ public class Customer implements Comparable<Customer> {
 
 	public int getService(){
 		return this.serviceTime;
+	}
+
+	public void servedTime(){
+		--this.serviceTime;
 	}
 
 	public String getName(){
