@@ -33,9 +33,9 @@ public class BizSim {
 	/* seed for Random() so that simulation is repeatable */
 	protected long seed;
 
-	/* Used to bound the range of service times that Customers require  in minutes*/
-	static final int MIN_SERVICE_TIME = 1; //TODO: set appropraitely
-	static final int MAX_SERVICE_TIME = 30; //TODO: set appropriately
+	/* Used to bound the range of service times that Customers require in minutes*/
+	static final int MIN_SERVICE_TIME = 1;
+	static final int MAX_SERVICE_TIME = 30;
 
 	/**
 	 * Creates a BusinessSimulation.
@@ -47,7 +47,9 @@ public class BizSim {
 	 * @seed used to seed a Random() so that simulation is repeatable.
 	 */
 	public BizSim(int numCustomers, int numServicePoints, int lastestArrival, long seed) {
-		customerQueue = generateCustomerSequence(numCustomers, latestArrival, seed);
+		this.customerQueue = generateCustomerSequence(numCustomers, latestArrival, seed);
+		this.time = 0;
+		this.seed = seed;
 		}
 	}
 
@@ -67,7 +69,12 @@ public class BizSim {
 		Random rand = new Random(seed);
 		PriorityVector<Customer> queue = new PriorityVector<Customer>();
 		for (int i = 0; i < numCustomers; ++i){
-			Customer x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, false);
+			if (rand%10 == 0){
+				// One in ten customers is a terrible person
+				Customer x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, true);
+			} else {
+				Customer x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, false);
+			}
 			queue.add(x);
 		}
 		return queue;
