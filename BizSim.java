@@ -71,8 +71,8 @@ public class BizSim {
 	 *         ordered by Customer arrival time
 	 */
 	public static PriorityVector<Customer> generateCustomerSequence(int numCustomers,
-								       int latestArrival,
-								       long seed) {
+		int latestArrival, long seed) {
+
 		Random rand = new Random(seed);
 		PriorityVector<Customer> queue = new PriorityVector<Customer>();
 		for (int i = 0; i < numCustomers; ++i){
