@@ -28,6 +28,9 @@ public class BizSim {
 	 	 customers wait in the last index of lines */
 	protected Vector<QueueVector<Customer>> lines;
 
+	// Number of servers
+	protected int servers;
+
 	/* current time step in the simulation */
 	protected int time;
 
@@ -53,6 +56,7 @@ public class BizSim {
 	public BizSim(int numCustomers, int numServicePoints, int latestArrival, long seed, int type) {
 		this.customerQueue = generateCustomerSequence(numCustomers, latestArrival, seed);
 		this.lines = new Vector<QueueVector<Customer>>();
+		this.servers = numServicePoints;
 		for (int i = 0; i < numServicePoints; ++i){
 			this.lines.add(new QueueVector<Customer>());
 		}
@@ -126,7 +130,7 @@ public class BizSim {
 		}
 
 		// make sure all customers who are first in line (i.e., being served) are marked as such
-		for (int b = 0; b < this.lines.size() - 2; ++b){
+		for (int b = 0; b < this.lines.size() - 1; ++b){
 			if (!this.lines.elementAt(b).isEmpty()){
 				this.lines.elementAt(b).get().atTeller = true;
 			}
@@ -135,11 +139,13 @@ public class BizSim {
 		//if supermarket
 		if (this.type == 1){
 			// if a customer arrives, add them to the shortest queue; if tied, go to the lower index
-			for (int h = 0; h < this.customerQueue.size() -1; ++h){
-				if (this.time == this.customerQueue.getFirst().getArrival()){
-					int smallest = this.customerQueue.size(); // a large number
-					for (int i = 0; i < this.lines.size() - 2; ++i){
-						if (this.lines.elementAt(i).size() < smallest){
+			if (this.customerQueue.getFirst() == null){
+				//
+			}	else {
+				while (this.customerQueue.getFirst() != null && this.time == this.customerQueue.getFirst().getArrival()){
+					int smallest = this.servers-1;
+					for (int i = 0; i <= this.lines.size() - 1; ++i){
+						if (this.lines.elementAt(i).size() < this.lines.elementAt(smallest).size()){
 							smallest = i;
 						}
 					}
@@ -148,7 +154,7 @@ public class BizSim {
 			}
 
 			// decrease service time required for all customers being served
-			for (int j = 0; j < this.lines.size() - 2; ++j){
+			for (int j = 0; j < this.lines.size(); ++j){
 				if (!this.lines.elementAt(j).isEmpty()){
 					this.lines.elementAt(j).get().servedTime();
 				}
@@ -159,20 +165,27 @@ public class BizSim {
 		} else {
 			// The bank has its own queue for customers waiting to for a teller; this is the last element in this.lines
 			// if a customer arrives, add them to the customer queue
-			if (this.time == this.customerQueue.getFirst().getArrival()){
-				this.lines.elementAt(this.lines.size() - 1).add(this.customerQueue.remove());
+			if (this.customerQueue.getFirst() == null){
+				// pass
+			} else {
+				while (this.customerQueue.getFirst() != null && this.time == this.customerQueue.getFirst().getArrival()){
+					this.lines.elementAt(this.lines.size() - 1).add(this.customerQueue.remove());
 				}
+			}
 
 			// check if a bank teller is free and there are customers, customers go to first free teller
-			for (int u = 0; u < this.lines.size() - 2; ++u){
+			for (int u = 0; u < this.lines.size() - 1; ++u){
 				if (this.lines.elementAt(u).size() == 0 && this.lines.elementAt(this.lines.size() - 1).size() != 0){
 					this.lines.elementAt(u).add(this.lines.elementAt(this.lines.size() - 1).remove());
 				}
 			}
 
 			// decrease service time required for all customers being served
-			for (int v = 0; v < this.lines.size() - 2; ++v){
-				this.lines.elementAt(v).get().servedTime();
+
+			for (int v = 0; v < this.lines.size() - 1; ++v){
+				if (this.lines.elementAt(v).get() != null){
+					this.lines.elementAt(v).get().servedTime();
+				}
 			}
 			return check();
 		}

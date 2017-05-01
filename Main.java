@@ -50,11 +50,18 @@ public class Main{
     int seed = seeds.nextInt();
     Random rand = new Random(seed);*/
 
-    BizSim sim1 = new BizSim(23, 5, 400, 1659, 1);
+    BizSim sim1 = new BizSim(23, 5, 100, 1997, 2);
     while (!sim1.check()){
       sim1.step();
       System.out.println(sim1.toString());
       System.out.println("");
     }
+    /*int i = 0;
+    while (i < 75){
+      sim1.step(1);
+      System.out.println(sim1.toString());
+      System.out.println("");
+      ++i;
+    }*/
   }
 }
