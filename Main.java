@@ -4,6 +4,7 @@ import structure5.*;
 
 public class Main{
 
+  /*
   static final int MIN_SERVICE_TIME = 1;
 	static final int MAX_SERVICE_TIME = 30;
 
@@ -26,6 +27,7 @@ public class Main{
 		}
 		return queue;
 	}
+  */
 
   public static void main(String args[]){
     //Customer a = new Customer(1, 10, 1, false);
@@ -44,6 +46,15 @@ public class Main{
     //System.out.println(b.toString());
     */
 
-  }
+    /*Random seeds = new Random();
+    int seed = seeds.nextInt();
+    Random rand = new Random(seed);*/
 
+    BizSim sim1 = new BizSim(23, 5, 400, 1659, 1);
+    while (!sim1.check()){
+      sim1.step();
+      System.out.println(sim1.toString());
+      System.out.println("");
+    }
+  }
 }

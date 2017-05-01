@@ -81,9 +81,9 @@ public class BizSim {
 			Customer x;
 			if (diceRoll % 10 == 0){
 				// One in ten customers is a terrible person
-				x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, true);
+				x = new Customer(rand.nextInt(latestArrival) + 1, rand.nextInt(MAX_SERVICE_TIME) + 1, i, true);
 			} else {
-				x = new Customer(rand.nextInt(latestArrival), rand.nextInt(MAX_SERVICE_TIME), i, false);
+				x = new Customer(rand.nextInt(latestArrival) + 1, rand.nextInt(MAX_SERVICE_TIME) + 1, i, false);
 			}
 			queue.add(x);
 		}
@@ -98,11 +98,11 @@ public class BizSim {
 	 */
 	public boolean step(int timeSteps){
 		int countdown = timeSteps;
-		while (countdown >= 0){
+		while (countdown > 0){
 			step();
 			--countdown;
 		}
-		return step();
+		return check();
 	}
 
 	/**
@@ -118,32 +118,40 @@ public class BizSim {
 		// regardless of type, first check if lines have customers with completed service
 		// if a customer's service is completed, remove that customer from the queue
 		for (int a = 0; a < lines.size(); ++a){
-			if (this.lines.elementAt(a).get().serviceTime == 0){
+			if (this.lines.elementAt(a).isEmpty()){
+				// pass
+			} else if (this.lines.elementAt(a).get().serviceTime <= 0){
 				this.lines.elementAt(a).remove();
 			}
 		}
 
 		// make sure all customers who are first in line (i.e., being served) are marked as such
 		for (int b = 0; b < this.lines.size() - 2; ++b){
-			this.lines.elementAt(b).get().atTeller = true;
+			if (!this.lines.elementAt(b).isEmpty()){
+				this.lines.elementAt(b).get().atTeller = true;
+			}
 		}
 
 		//if supermarket
 		if (this.type == 1){
 			// if a customer arrives, add them to the shortest queue; if tied, go to the lower index
-			if (this.time == this.customerQueue.getFirst().getArrival()){
-				int smallest = this.customerQueue.size(); // a large number
-				for (int i = 0; i < this.lines.size() - 2; ++i){
-					if (this.lines.elementAt(i).size() < smallest){
-						smallest = i;
+			for (int h = 0; h < this.customerQueue.size() -1; ++h){
+				if (this.time == this.customerQueue.getFirst().getArrival()){
+					int smallest = this.customerQueue.size(); // a large number
+					for (int i = 0; i < this.lines.size() - 2; ++i){
+						if (this.lines.elementAt(i).size() < smallest){
+							smallest = i;
+						}
 					}
+					this.lines.elementAt(smallest).add(this.customerQueue.remove());
 				}
-				this.lines.elementAt(smallest).add(this.customerQueue.remove());
 			}
 
 			// decrease service time required for all customers being served
 			for (int j = 0; j < this.lines.size() - 2; ++j){
-				this.lines.elementAt(j).get().servedTime();
+				if (!this.lines.elementAt(j).isEmpty()){
+					this.lines.elementAt(j).get().servedTime();
+				}
 			}
 			return check();
 
@@ -153,7 +161,8 @@ public class BizSim {
 			// if a customer arrives, add them to the customer queue
 			if (this.time == this.customerQueue.getFirst().getArrival()){
 				this.lines.elementAt(this.lines.size() - 1).add(this.customerQueue.remove());
-			}
+				}
+
 			// check if a bank teller is free and there are customers, customers go to first free teller
 			for (int u = 0; u < this.lines.size() - 2; ++u){
 				if (this.lines.elementAt(u).size() == 0 && this.lines.elementAt(this.lines.size() - 1).size() != 0){
@@ -171,6 +180,7 @@ public class BizSim {
 
 	/**
 	 * Checks if all customers have been satisfied
+	 	 Returns true once all customers have been satisfied
 	 */
 	public boolean check(){
 		// if there are still customers to arrive
