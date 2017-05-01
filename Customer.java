@@ -21,7 +21,7 @@ public class Customer implements Comparable<Customer> {
 
 	public Customer(int arrivalTime, int serviceTime, int name, boolean val) {
 		this.arrivalTime = arrivalTime;
-		this.name = nameList(name); //Customers are people, too
+		this.name = nameList(name % 22); //Customers are people, too
 		if (this.name.equals("Brady") || this.name.equals("Brent")){
 			this.problemCustomer = true; //Disclaimer: we think Brent is great. Brady's still a mischievous being.
 		} else {
@@ -88,12 +88,11 @@ public class Customer implements Comparable<Customer> {
 		return this.problemCustomer;
 	}
 
-	//Vector<String> names = new Vector<String>("Xemnas", "Xigbar", "Xaldin",
-	//"Vexen", "Lexaeus", "Zexion", "Saix", "Axel", "Demyx", "Luxord", "Marluxia",
-	//"Larxene", "Roxas", "Xion", "Grace", "Will", "Alison", "Alexia", "Cielo", "Cecilia",
-	//"Brady");
+	
 
-	public String nameList(int i){
+	public String nameList(int i){ //names for fun, if simulating more than 23 customers, still works
+		
+		//feel free to consider this as extraneous and solely for fun
 		Vector<String> names = new Vector<String>();
 		//Organization XIII goes to the bank or supermarket
 		names.add("Xemnas"); //i = 0
