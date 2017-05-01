@@ -3,16 +3,83 @@ Will Fung and Grace Mazzarella
 
 Thought Questions:
 1.
-[]
+Customers: 23
+Lines: 5
+Minimum service time: 1 min
+Maximum service time: 30 min
+(With the exception of the occasional problem customer, in which case service time is multiplied by 5)
+
+Seed 1: 1997 - market (194), bank (176)
+Seed 2: 31415926 - market(259), bank (229)
+Seed 3: 273 - market(224), bank(194)
+Seed 4: 19960928 - market(180), bank(160)
+Seed 5: 11970119 - market(212), bank(240)!
+Seed 6: 19970119 - market(184), bank(194)!
+Seed 7: 20000308 - market(238), bank(258)!
+Seed 8: 19661024 - market(235), bank(238)!
+Seed 9: 19631108 - market(196), bank(196) **
+Seed 10: 17760704 - market(124), bank(133)!
+
+It seems that about half the time, the market is faster and half the time the bank is faster.
 
 2.
-[]
+WILL HOWEVER YOU SAID TO DO THIS WAS QUICK AND EASY AND NOT THE WAY TO DO IT
+
+WE SHOULD EITHER WRITE A PROGRAM TO CALUCLATE THIS OR *GROAN* DO IT BY HAND FOR ALL 10 SEEDS
+
+Market
+Seed 1: 194/23 = 8.435 min
+Seed 2: 259/23 = 11.261 min
+Seed 3: 224/23 = 9.739 min
+Seed 4: 180/23 = 7.826 min
+Seed 5: 212/23 = 9.217 min
+Seed 6: 184/23 = 8.000 min
+Seed 7: 238/23 = 10.348 min
+Seed 8: 235/23 = 10.217 min
+Seed 9: 196/23 = 8.522 min
+Seed 10:  124/23 = 5.391 min
+
+Bank
+Seed 1: 176/23 = 7.652 min
+Seed 2: 229/23 = 9.957 min
+Seed 3: 194/23 = 8.435 min
+Seed 4: 160/23 = 6.957 min
+Seed 5: 240/23 = 10.435 min
+Seed 6: 194/23 = 8.435 min
+Seed 7: 258/23 = 11.217 min
+Seed 8: 238/23 = 10.348 min
+Seed 9: 196/23 = 8.522 min
+Seed 10: 133/23 = 5.783 min
+
+Market - Bank
+Seed 1: 8.435 - 7.652 = 0.783 min
+Seed 2: 11.261 - 9.957 = 1.304 min
+Seed 3: 9.739 - 8.435 = 1.304 min
+Seed 4: 7.826 - 6.957 = 0.869 min
+Seed 5: 9.217 - 10.435 = -1.218 min !
+Seed 6: 8.000 - 8.435 = -0.435 min !
+Seed 7: 10.348- 11.217 = -0.869 min !
+Seed 8: 10.217 - 10.348 = -0.131 min !
+Seed 9: 8.522 - 8.522 = 0.000 min **
+Seed 10: 5.391 - 5.783 = -0.392 min !
 
 3.
-[]
+Simulating the ability to jump between lines in a multiple-line simulation where
+customers can move from the end of one line to another until the lines are even
+would mean we cannot use a queue, since queues can only add to the back and remove
+from the front. We'd need a dequeue to store customers, since both ends in that
+structure are accessible.
 
 4.
-[]
+
+WILL CHECK ME
+
+If there were separate lines dedicated to serving customers of varying lnegths of
+service times, improvement of average wait time would depend on how many of each
+line there are. If there is only one line serving customers with long requirements,
+then all those customers' wait times would average out the short wait times of the
+faster customers. However, if there are many lines serving long requirement customers,
+average wait time might go down.
 */
 
 import java.util.Vector;
