@@ -15,6 +15,7 @@ public class Customer implements Comparable<Customer> {
 
 	 protected int arrivalTime;
 	 protected int serviceTime;
+	 protected int waitTime;
 	 protected String name;
 	 protected boolean atTeller;
 	 protected boolean problemCustomer;
@@ -32,6 +33,7 @@ public class Customer implements Comparable<Customer> {
 		} else {
 			this.serviceTime = serviceTime;
 		}
+		this.waitTime = 0;
 		this.atTeller = false; // switched if first in queue
 
 	}
@@ -46,6 +48,10 @@ public class Customer implements Comparable<Customer> {
 
 	public void servedTime(){
 		--this.serviceTime;
+	}
+
+	public void waiting(){
+		++this.waitTime;
 	}
 
 	public String getName(){
@@ -88,10 +94,10 @@ public class Customer implements Comparable<Customer> {
 		return this.problemCustomer;
 	}
 
-	
+
 
 	public String nameList(int i){ //names for fun, if simulating more than 23 customers, still works
-		
+
 		//feel free to consider this as extraneous and solely for fun
 		Vector<String> names = new Vector<String>();
 		//Organization XIII goes to the bank or supermarket

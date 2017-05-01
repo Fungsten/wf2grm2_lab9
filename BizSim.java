@@ -20,8 +20,8 @@ Seed 8: 19661024 - market(235), bank(238)!
 Seed 9: 19631108 - market(196), bank(196) **
 Seed 10: 17760704 - market(124), bank(133)!
 
-It seems that about half the time, the market is faster and half the time the bank is faster. This is actually due to the one of the 
-last customers simply taking forever. 
+It seems that about half the time, the market is faster and half the time the bank is faster. This is actually due to the one of the
+last customers simply taking forever.
 Had we left out our problem customers, the bank would come out on top more often because the instances where the bank lost
 had a problem customer (essentially one that would take much longer than the average) show up near the end and would have to wait in
 a bank style queue before being serviced rather than being able to be immediately serviced in a market style queue.
@@ -73,7 +73,7 @@ customers can move from the end of one line to another until the lines are even
 would mean we cannot use a queue, since queues can only add to the back and remove
 from the front. We'd need a dequeue to store customers, since both ends in that
 structure are accessible, so a data structure where both the front and back may be accessed
-will be neessary. 
+will be neessary.
 
 4.
 
@@ -91,7 +91,7 @@ large service time. However, this would mean the total time a customer with a lo
 whatever service they're looking for will actually have their total time extended. In conclusion, wait times of quickly serviceable
 customers will go down while vice versa for the customers requiring higher service times. Whether this effectively balances each other
 out will depend on the actual numbers but if one assumes a higher voume of low service time customers, then an argument could be made
-that the average customer will have their average wait time reduced. 
+that the average customer will have their average wait time reduced.
 */
 
 import java.util.Vector;
@@ -119,6 +119,9 @@ public class BizSim { //because BusinessSimulation is too many handfuls of keyst
 	// If type = 1, market; if type = 2, bank
 	protected int type;
 
+	// Stores wait times for easy accessed
+	protected Vector<Integer> waits;
+
 	/* Used to bound the range of service times that Customers require in minutes*/
 	static final int MIN_SERVICE_TIME = 1;
 	static final int MAX_SERVICE_TIME = 30;
@@ -140,8 +143,9 @@ public class BizSim { //because BusinessSimulation is too many handfuls of keyst
 			this.lines.add(new QueueVector<Customer>());
 		}
 		this.time = 0; //clock in, clock out
-		this.seed = seed; 
+		this.seed = seed;
 		this.type = type; //1 being market style queueing, literally any other int being bank style queueing
+		this.waits = new Vector<Integer>();
 	}
 
 	/**
@@ -205,6 +209,7 @@ public class BizSim { //because BusinessSimulation is too many handfuls of keyst
 			if (this.lines.elementAt(a).isEmpty()){
 				// pass
 			} else if (this.lines.elementAt(a).get().serviceTime <= 0){
+				this.waits.add(this.lines.elementAt(a).get().waitTime);
 				this.lines.elementAt(a).remove();
 			}
 		}
@@ -233,10 +238,21 @@ public class BizSim { //because BusinessSimulation is too many handfuls of keyst
 				}
 			}
 
-			// decrease service time required for all customers being served
 			for (int j = 0; j < this.lines.size(); ++j){
+				System.out.println("I PRINTED: " + this.lines.elementAt(j));
+				// decrease service time required for all customers being served
 				if (!this.lines.elementAt(j).isEmpty()){
 					this.lines.elementAt(j).get().servedTime();
+				} else {
+					// increment wait time for all customers not being served
+					/*if (!this.lines.elementAt(j).isEmpty()){
+						java.util.Iterator<QueueVector> iterMarket = this.lines.elementAt(j).iterator();	// Why does it think that this.lines.elementAt(j) is a Customer? It's a QueueVector!
+						while (iterMarket.hasNext()){
+							if (iterMarket.get().atTeller == false){
+								iterMarket.next().waiting();
+							}
+						}
+					}*/
 				}
 			}
 			return check();
@@ -260,13 +276,24 @@ public class BizSim { //because BusinessSimulation is too many handfuls of keyst
 				}
 			}
 
-			// decrease service time required for all customers being served
-
+			// doesn't consider last line, which is where the customers wait
 			for (int v = 0; v < this.lines.size() - 1; ++v){
-				if (this.lines.elementAt(v).get() != null){
+				// decrease service time required for all customers being served
+				if (!this.lines.elementAt(v).isEmpty()){
 					this.lines.elementAt(v).get().servedTime();
+				} else {
+					// increment wait time for all customers not being served
+					if (!this.lines.elementAt(v).isEmpty()){
+						/*java.util.Iterator<Customer> iterBank = this.lines.elementAt(v).iterator();	// Why does it think that this.lines.elementAt(j) is a Customer? It's a QueueVector!
+						while (iterBank.hasNext()){
+							if (iterBank.get().atTeller == false){
+								iterBank.next().waiting();
+							}
+						}*/
+					}
 				}
 			}
+
 			return check();
 		}
 	}
