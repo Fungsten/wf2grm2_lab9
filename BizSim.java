@@ -20,12 +20,13 @@ Seed 8: 19661024 - market(235), bank(238)!
 Seed 9: 19631108 - market(196), bank(196) **
 Seed 10: 17760704 - market(124), bank(133)!
 
-It seems that about half the time, the market is faster and half the time the bank is faster.
+It seems that about half the time, the market is faster and half the time the bank is faster. This is actually due to the one of the 
+last customers simply taking forever. 
+Had we left out our problem customers, the bank would come out on top more often because the instances where the bank lost
+had a problem customer (essentially one that would take much longer than the average) show up near the end and would have to wait in
+a bank style queue before being serviced rather than being able to be immediately serviced in a market style queue.
 
 2.
-WILL HOWEVER YOU SAID TO DO THIS WAS QUICK AND EASY AND NOT THE WAY TO DO IT
-
-WE SHOULD EITHER WRITE A PROGRAM TO CALUCLATE THIS OR *GROAN* DO IT BY HAND FOR ALL 10 SEEDS
 
 Market
 Seed 1: 194/23 = 8.435 min
@@ -63,16 +64,18 @@ Seed 8: 10.217 - 10.348 = -0.131 min !
 Seed 9: 8.522 - 8.522 = 0.000 min **
 Seed 10: 5.391 - 5.783 = -0.392 min !
 
+Thanks to calculations with data by the power of Wolfram Alpha, the average difference in wait times is .1215 minutes,
+advantage bank style queueing.
+
 3.
 Simulating the ability to jump between lines in a multiple-line simulation where
 customers can move from the end of one line to another until the lines are even
 would mean we cannot use a queue, since queues can only add to the back and remove
 from the front. We'd need a dequeue to store customers, since both ends in that
-structure are accessible.
+structure are accessible, so a data structure where both the front and back may be accessed
+will be neessary. 
 
 4.
-
-WILL CHECK ME
 
 If there were separate lines dedicated to serving customers of varying lnegths of
 service times, improvement of average wait time would depend on how many of each
@@ -80,13 +83,22 @@ line there are. If there is only one line serving customers with long requiremen
 then all those customers' wait times would average out the short wait times of the
 faster customers. However, if there are many lines serving long requirement customers,
 average wait time might go down.
+
+Will's contribution:
+Having an 'express lane' of sorts would allow customers in general to have a reasonable wait time to service time ratio.
+There would be little chance a customer with low service time would have to wait too long behind a customer with an unusually
+large service time. However, this would mean the total time a customer with a long service time would spend waiting and completing
+whatever service they're looking for will actually have their total time extended. In conclusion, wait times of quickly serviceable
+customers will go down while vice versa for the customers requiring higher service times. Whether this effectively balances each other
+out will depend on the actual numbers but if one assumes a higher voume of low service time customers, then an argument could be made
+that the average customer will have their average wait time reduced. 
 */
 
 import java.util.Vector;
 import java.util.Random;
 import structure5.*;
 
-public class BizSim {
+public class BizSim { //because BusinessSimulation is too many handfuls of keystrokes, you tell us computer scientists are lazy, we -will- follow suit
 
 	/* sequence of customers, prioritized by randomly-generated event time */
 	protected PriorityVector<Customer> customerQueue;
@@ -127,9 +139,9 @@ public class BizSim {
 		for (int i = 0; i < numServicePoints; ++i){
 			this.lines.add(new QueueVector<Customer>());
 		}
-		this.time = 0;
-		this.seed = seed;
-		this.type = type;
+		this.time = 0; //clock in, clock out
+		this.seed = seed; 
+		this.type = type; //1 being market style queueing, literally any other int being bank style queueing
 	}
 
 	/**
@@ -153,6 +165,7 @@ public class BizSim {
 			if (diceRoll % 10 == 0){
 				// One in ten customers is a terrible person
 				x = new Customer(rand.nextInt(latestArrival) + 1, rand.nextInt(MAX_SERVICE_TIME) + 1, i, true);
+				//change to false to remove 'problem' customers
 			} else {
 				x = new Customer(rand.nextInt(latestArrival) + 1, rand.nextInt(MAX_SERVICE_TIME) + 1, i, false);
 			}
@@ -207,7 +220,7 @@ public class BizSim {
 		if (this.type == 1){
 			// if a customer arrives, add them to the shortest queue; if tied, go to the lower index
 			if (this.customerQueue.getFirst() == null){
-				//
+				//because lines might be empty we don't like null pointer exceptions ruining things
 			}	else {
 				while (this.customerQueue.getFirst() != null && this.time == this.customerQueue.getFirst().getArrival()){
 					int smallest = this.servers-1;
@@ -280,7 +293,13 @@ public class BizSim {
 	 * @return a string representation of the simulation
 	 */
 	public String toString() {
-		String str = "Time: " + time + "\n";
+		String clockTime; //because clocks that display hour : minutes is very nice
+			if (time % 60 < 10){
+				clockTime = (int)Math.floor(time / 60) +":0" + (time % 60);
+			} else {
+				clockTime = (int)Math.floor(time / 60) +":" + (time % 60);
+			}
+		String str = "Time: " + clockTime + "\n";
 		str = str + "Event Queue: ";
 		if (this.customerQueue != null) {
 			str = str + this.customerQueue.toString();
